@@ -1,0 +1,13 @@
+# Node modules from NPM
+# Restore with `npm install`
+node_modules/
+
+# Babel builds
+# Run with `npm run build`
+build/
+
+# VS Code settings
+.vscode/
+
+# MacOS system files
+.DS_Store
