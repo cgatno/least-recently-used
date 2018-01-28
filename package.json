@@ -1,11 +1,13 @@
 {
   "name": "lru",
   "version": "1.0.0",
-  "description": "A least recently used (LRU) cache implementation using Node.js and Express for web accessibility.",
+  "description":
+    "A least recently used (LRU) cache implementation using Node.js and Express for web accessibility.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel ./src -d ./build --watch",
+    "build": "babel ./src -d ./build",
+    "watch": "babel ./src -d ./build --watch",
     "start": "node build/app.js"
   },
   "author": "",
