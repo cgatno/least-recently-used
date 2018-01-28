@@ -58,15 +58,40 @@ export default class LRUCache {
     return val;
   }
 
-  put(key, newValue = '') {
+  /**
+   * Updates a K/V pair if the provided key exists or adds a new pair if it doesn't.
+   * @param {string} key The key to look up or add
+   * @param {string?} value The new value for the associated key. Defaults to empty string for
+   * updates, current timestamp for new K/V pairs.
+   */
+  put(key, value = '') {
     // Do some routine validation of the provided key first
     if (!key) {
       throw new Error('No key provided for cache item update.');
     }
     if (!this.store.has(key)) {
-      throw new Error(
-        'The key provided for update does not exist in the cache.',
-      );
+      // The key doesn't exist in the store, so try to add a new one
+      const newKey = key || uuid(); // default to a time-based key if none provided
+      const newVal = (value.length > 0 && value) || Date.now().toString(); // Default to timestamp value
+
+      // Refresh the store with the new K/V pair
+      // If the store is at max capacity, cut out the last item and notify via console
+      if (this.store.size === this.capacity) {
+        console.warn(
+          `Max entries reached! Removing one before adding [${newKey}, ${newVal}]...`,
+        );
+      }
+      const entriesToKeep =
+        this.store.size === this.capacity
+          ? [...this.store.entries()].slice(0, -1)
+          : [...this.store.entries()];
+      this.store = new Map([[newKey, newVal], ...entriesToKeep]);
+
+      // TODO: remove
+      console.log(this.store);
+
+      // Return the new KV pair
+      return [newKey, newVal];
     }
 
     // We know that a key was provided and it exists in the store, so refresh store with new K/V at top
@@ -74,13 +99,13 @@ export default class LRUCache {
     this.store.delete(key);
 
     // New store with new K/V pair and order
-    this.store = new Map([[key, newValue], ...this.store.entries()]);
+    this.store = new Map([[key, value], ...this.store.entries()]);
 
     // TODO: remove
     console.log(this.store);
 
     // Return the new KV pair
-    return [key, newValue];
+    return [key, value];
   }
 
   /**
@@ -96,34 +121,5 @@ export default class LRUCache {
     console.log(this.store);
 
     return success;
-  }
-
-  /**
-   * Adds a new key/value pair to the top of the LRU cache.
-   * @param {string?} key Defaults to a unique ID from uuid if not provided
-   * @param {string?} value Defaults to current timestamp
-   */
-  addItem(key, value) {
-    const newKey = key || uuid(); // default to a time-based key if none provided
-    const newVal = value || Date.now().toString(); // Default to timestamp value
-
-    // Refresh the store with the new K/V pair
-    // If the store is at max capacity, cut out the last item and notify via console
-    if (this.store.size === this.capacity) {
-      console.warn(
-        `Max entries reached! Removing one before adding [${newKey}, ${newVal}]...`,
-      );
-    }
-    const entriesToKeep =
-      this.store.size === this.capacity
-        ? [...this.store.entries()].slice(0, -1)
-        : [...this.store.entries()];
-    this.store = new Map([[newKey, newVal], ...entriesToKeep]);
-
-    // TODO: remove
-    console.log(this.store);
-
-    // Return the new KV pair
-    return [newKey, newVal];
   }
 }
