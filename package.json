@@ -6,8 +6,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel ./src -d ./build",
-    "watch": "babel ./src -d ./build --watch",
+    "build": "babel ./src -d ./build -s",
+    "watch": "babel ./src -d ./build --watch -s",
     "start": "node build/app.js"
   },
   "author": "",
