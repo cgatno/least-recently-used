@@ -37,25 +37,20 @@ export default class LRUCache {
    * value is returned.
    */
   get(key) {
-    // If no key supplied, default to first key in the Map
-    const desiredKey = key || this.store.keys().next().value;
-
     // Map objects automatically return `undefined` for keys they don't have
     // Get the value for a given key or default to the first value
-    const val = this.store.get(desiredKey);
+    const val = this.store.get(key);
 
     // Only remove an item and refresh the store if a value was ultimately found
     if (val) {
       // Remove the accessed K/V pair from the store, then refresh the store with the pair at the "top"
-      this.store.delete(desiredKey);
-      this.store = new Map([[desiredKey, val], ...this.store.entries()]);
+      this.store.delete(key);
+      this.store = new Map([[key, val], ...this.store.entries()]);
+      return val;
+    } else {
+      // The requested key wasn't found or none was provided -- return first entry in store
+      return this.store.entries().next().value;
     }
-
-    // TODO: remove
-    console.log(this.store);
-
-    // Return the retrieved value
-    return val;
   }
 
   /**
@@ -87,9 +82,6 @@ export default class LRUCache {
           : [...this.store.entries()];
       this.store = new Map([[newKey, newVal], ...entriesToKeep]);
 
-      // TODO: remove
-      console.log(this.store);
-
       // Return the new KV pair
       return [newKey, newVal];
     }
@@ -100,9 +92,6 @@ export default class LRUCache {
 
     // New store with new K/V pair and order
     this.store = new Map([[key, value], ...this.store.entries()]);
-
-    // TODO: remove
-    console.log(this.store);
 
     // Return the new KV pair
     return [key, value];
@@ -116,9 +105,6 @@ export default class LRUCache {
   delete(key) {
     // A simple delete operation on the Map should remove this item and maintain positions of everything else
     const success = this.store.delete(key);
-
-    // TODO: remove
-    console.log(this.store);
 
     return success;
   }
