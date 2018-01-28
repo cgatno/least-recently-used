@@ -30,13 +30,13 @@ router.get('/:key', (req, res) => {
 });
 
 // POST /cache - new key
-// Use query params `key` and `value` to store a new K/V pair in the cache
+// Use request body params `key` and `value` to store a new K/V pair in the cache
 router.post('/', (req, res) => {
   // Grab the new key and value from query params
-  const { key, value } = req.query;
+  const { key, value } = req.body;
 
   try {
-    const newItem = lru.addItem(key, value);
+    const newItem = lru.put(key, value);
     return res.status(200).json(newItem);
   } catch (ex) {
     // TODO: send a prettier error message
@@ -61,7 +61,7 @@ router.delete('/:key', (req, res) => {
 // PUT /cache/:key - update the value associated with a specific key
 router.put('/:key', (req, res) => {
   const { key } = req.params; // grab key from URL params
-  const { value } = req.query; // get new value from query params
+  const { value } = req.body; // get new value from request body
 
   // TODO: param validation
 

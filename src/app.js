@@ -1,10 +1,14 @@
 import express from 'express';
+import body from 'body-parser';
 
 // Individual routes
 import CacheRoute from './routes/cache';
 
 // Create new instance of Express app
 const app = express();
+
+// Add body-parser middleware for POST JSON
+app.use(body.json());
 
 // Express app root path to welcome visitors
 app.get('/', (req, res) =>
