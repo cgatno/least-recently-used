@@ -4,10 +4,10 @@ A straightforward [Least Recently Used (LRU) cache](<https://en.wikipedia.org/wi
 
 ## Getting Started
 
-        git clone https://github.com/cgatno/least-recently-used.git
-        cd least-recently-used
-        npm install
-        npm start
+    git clone https://github.com/cgatno/least-recently-used.git
+    cd least-recently-used
+    npm install
+    npm start
 
 See the [HTTP interface specs](#http-interface) below for info on using the cache.
 
@@ -30,18 +30,18 @@ See below for a list of app endpoints.
 
 By default, the app listens at `http://localhost:8080`. The port can be overriden using the `PORT` environment variable. (E.g. `PORT=4343 npm start`)
 
-| Endpoint       | Request Type | Input (application/json)         | Response Code | Response Description                                               |
-| -------------- | ------------ | -------------------------------- | ------------- | ------------------------------------------------------------------ |
-| `/`            | GET          | N/A                              | 200           | Friendly, descriptive welcome message 😊                           |
-| `/cache`       | GET          | N/A                              | 200           | JSON array of form `[<key>, <value>]` for most recently used pair. |
-|                | POST         | `{key: string?, value: string?}` | 200           | JSON array of form `[<new key>, <new value>]`                      |
-|                |              |                                  | 500           | Add pair error message - stack trace logged to Node console        |
-| `/cache/{key}` | GET          | N/A                              | 200           | Plaintext value for the given key                                  |
-|                |              |                                  | 404           | Key not found message                                              |
-|                | DELETE       | N/A                              | 200           | Key deleted message                                                |
-|                |              |                                  | 404           | Key not found message                                              |
-|                | PUT          | `{value: string?}`               | 200           | JSON array of form `[<key>, <new value>]`                          |
-|                |              |                                  | 500           | Key update error message - stack trace logged to Node console      |
+| Endpoint       | Request Type | Input (application/json)         | Response Code | Response Description                                              |
+| -------------- | ------------ | -------------------------------- | ------------- | ----------------------------------------------------------------- |
+| `/`            | GET          | N/A                              | 200           | Friendly, descriptive welcome message 😊                          |
+| `/cache`       | GET          | N/A                              | 200           | JSON array of form `[<key>, <value>]` for most recently used pair |
+|                | POST         | `{key: string?, value: string?}` | 200           | JSON array of form `[<new key>, <new value>]`                     |
+|                |              |                                  | 500           | Add pair error message - stack trace logged to Node console       |
+| `/cache/{key}` | GET          | N/A                              | 200           | Plaintext value for the given key                                 |
+|                |              |                                  | 404           | Key not found message                                             |
+|                | DELETE       | N/A                              | 200           | Key deleted message                                               |
+|                |              |                                  | 404           | Key not found message                                             |
+|                | PUT          | `{value: string?}`               | 200           | JSON array of form `[<key>, <new value>]`                         |
+|                |              |                                  | 500           | Key update error message - stack trace logged to Node console     |
 
 ## Roadmap (TODO)
 
