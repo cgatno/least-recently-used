@@ -2,7 +2,7 @@ import polka from 'polka';
 import body from 'body-parser';
 import LRUCache from './LRUCache';
 
-// When the Express app starts up, create a new LRU cache
+// Create a new LRU cache
 const lru = new LRUCache({ capacity: 5 });
 
 // Choose a port to listen on, preferentially taking input from ENV
@@ -20,7 +20,6 @@ polka()
   )
 
   // Root /cache route for handling no params
-  // TODO: Change to a more "stern" message about supplying a key
   .get('/cache', (req, res) =>
     res.end(`Welcome! Most recently updated cache item: ${lru.get()}.`),
   )
@@ -30,8 +29,6 @@ polka()
   // If key exists, return status 200 and display key's value
   .get('/cache/:key', (req, res) => {
     const { key } = req.params; // grab key from URL params
-
-    // TODO: param validation
 
     return res.end(lru.get(key));
   })
@@ -46,9 +43,9 @@ polka()
       const newItem = lru.put(key, value);
       return res.end(JSON.stringify(newItem));
     } catch (ex) {
-      // TODO: send a prettier error message
+      console.error(ex);
       res.statusCode = 500;
-      return res.end(ex.message);
+      return res.end('Error while adding pair to the cache.');
     }
   })
 
@@ -56,7 +53,6 @@ polka()
   .delete('/cache/:key', (req, res) => {
     const { key } = req.params; // grab key from URL params
 
-    // TODO: param validation
     const found = lru.delete(key);
     if (found) {
       return res.end('Key found and deleted successfully.');
@@ -70,8 +66,6 @@ polka()
   .put('/cache/:key', (req, res) => {
     const { key } = req.params; // grab key from URL params
     const { value } = req.body; // get new value from request body
-
-    // TODO: param validation
 
     try {
       const newItem = lru.put(key, value);
