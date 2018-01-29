@@ -46,11 +46,9 @@ export default class LRUCache {
       // Remove the accessed K/V pair from the store, then refresh the store with the pair at the "top"
       this.store.delete(key);
       this.store = new Map([[key, val], ...this.store.entries()]);
-      return val;
-    } else {
-      // The requested key wasn't found or none was provided -- return first entry in store
-      return this.store.entries().next().value;
     }
+
+    return val;
   }
 
   /**

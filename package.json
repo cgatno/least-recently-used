@@ -1,15 +1,22 @@
 {
   "name": "lru",
   "version": "1.0.0",
-  "description": "A least recently used (LRU) cache implementation using Node.js and Express for web accessibility.",
-  "main": "app.js",
+  "description":
+    "A least recently used (LRU) cache implementation using native Map in Node.js and Polka for web accessibility.",
+  "main": "build/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel ./src -d ./build -s",
     "watch": "babel ./src -d ./build --watch -s",
-    "start": "node build/app.js"
+    "start": "node build/app.js",
+    "postinstall": "npm run build"
   },
-  "author": "",
+  "author":
+    "Christian Gaetano <hello@christiangaetano.com> (https://christiangaetano.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cgatno/least-recently-used"
+  },
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",

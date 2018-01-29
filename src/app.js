@@ -20,17 +20,31 @@ polka()
   )
 
   // Root /cache route for handling no params
-  .get('/cache', (req, res) =>
-    res.end(`Welcome! Most recently updated cache item: ${lru.get()}.`),
-  )
+  .get('/cache', (req, res) => {
+    if (lru.store.size > 0) {
+      res.end(JSON.stringify(lru.store.entries().next().value));
+    }
+
+    return res.end("There's nothing in the cache yet!");
+  })
 
   // GET /cache/:key - get value for given key
   // Validate a key parameter passed in by user. Check to see if key currently exists in cache.
   // If key exists, return status 200 and display key's value
+  // If key doesn't exist, returns status 200 and most recently used value
   .get('/cache/:key', (req, res) => {
     const { key } = req.params; // grab key from URL params
 
-    return res.end(lru.get(key));
+    const val = lru.get(key);
+
+    // If value exists for given key, send back 200 and the value
+    if (val) {
+      return res.end(val);
+    }
+
+    // Send a 404 and key not found message otherwise
+    res.statusCode = 404;
+    return res.end(`The key '${key}' doesn't exist in the cache.`);
   })
 
   // POST /cache - new key
@@ -55,11 +69,12 @@ polka()
 
     const found = lru.delete(key);
     if (found) {
-      return res.end('Key found and deleted successfully.');
+      return res.end(`Key '${key}' deleted successfully.`);
     }
 
-    // TODO: investigate more appropriate HTTP codes for this situation
-    return res.end('Key could not be found in cache.');
+    // Return 404 for nonexistent key
+    res.statusCode = 404;
+    return res.end(`Key '${key}' couldn't be found in cache.`);
   })
 
   // PUT /cache/:key - update the value associated with a specific key
@@ -73,7 +88,8 @@ polka()
     } catch (ex) {
       // TODO: send a prettier error message
       res.statusCode = 500;
-      return res.end(ex.message);
+      console.error(ex);
+      return res.end('Error while updating pair.');
     }
   })
 
